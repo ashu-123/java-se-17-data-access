@@ -24,8 +24,13 @@ public class App {
                     .ifPresent(book -> System.out.println("id = " + book.getId() + " title = " + book.getTitle()));
         }
 
-//        Book newBook = new Book().setTitle("Thomas H. Cormen");
-//        newBook = bookDao.create(newBook);
+        Book newBook = new Book().setTitle("Thomas H. Cormen");
+        newBook = bookDao.create(newBook);
+
+        System.out.println("Book created with id = " + newBook.getId());
+
+        int recordsDeleted = bookDao.delete(newBook);
+        System.out.println("Number of records deleted = " + recordsDeleted);
 
         books.forEach(book -> book.setRating(5));
 
