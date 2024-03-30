@@ -128,4 +128,24 @@ public class BookDao extends AbstractDao implements Dao<Book> {
         }
         return rowsAffected;
     }
+
+    @Override
+    public int[] delete(List<Book> books) {
+        int[] recordsDeleted = {};
+        String sqlQuery = "DELETE FROM BOOK WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            for(Book book : books) {
+                preparedStatement.setLong(1, book.getId());
+
+                preparedStatement.addBatch();
+            }
+
+            recordsDeleted = preparedStatement.executeBatch();
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return recordsDeleted;
+    }
 }

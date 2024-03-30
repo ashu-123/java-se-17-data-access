@@ -4,6 +4,7 @@ import com.learning.model.Book;
 import com.learning.repository.BookDao;
 import com.learning.repository.Dao;
 
+import java.util.List;
 import java.util.Optional;
 
 public class App {
@@ -37,5 +38,15 @@ public class App {
         var records = bookDao.update(books);
 
         System.out.println(records.length);
+
+        System.out.println("=============================");
+
+        Book newBook2 = new Book().setTitle("Thomas H. Cormen");
+        newBook2 = bookDao.create(newBook2);
+
+        System.out.println("Book created with id = " + newBook2.getId());
+
+        int[] deletedCount = bookDao.delete(List.of(newBook2));
+        System.out.println("Number of records deleted = " + deletedCount.length);
     }
 }

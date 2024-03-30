@@ -16,4 +16,6 @@ public interface Dao<T> {
     int[] update(List<T> t);
 
     int delete(T t);
+
+    int[] delete(List<T> t);
 }
