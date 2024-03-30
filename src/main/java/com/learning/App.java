@@ -5,7 +5,6 @@ import com.learning.repository.BookDao;
 import com.learning.repository.Dao;
 
 import java.util.List;
-import java.util.Optional;
 
 public class App {
     public static void main(String[] args) {
@@ -19,7 +18,7 @@ public class App {
         var bookById = bookDao.findById(1);
         bookById.ifPresent(book -> System.out.println("id = " + book.getId() + " title = " + book.getTitle()));
 
-        if(bookById.isPresent()) {
+        if (bookById.isPresent()) {
             bookById.map(book -> book.setTitle("Effective Java: Second Edition"))
                     .map(bookDao::update)
                     .ifPresent(book -> System.out.println("id = " + book.getId() + " title = " + book.getTitle()));
