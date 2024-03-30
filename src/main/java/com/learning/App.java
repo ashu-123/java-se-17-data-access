@@ -18,8 +18,14 @@ public class App {
         var bookById = bookDao.findById(1);
         bookById.ifPresent(book -> System.out.println("id = " + book.getId() + " title = " + book.getTitle()));
 
-        Book newBook = new Book().setTitle("Thomas H. Cormen");
-        newBook = bookDao.create(newBook);
+        if(bookById.isPresent()) {
+            bookById.map(book -> book.setTitle("Effective Java: Second Edition"))
+                    .map(bookDao::update)
+                    .ifPresent(book -> System.out.println("id = " + book.getId() + " title = " + book.getTitle()));
+        }
+
+//        Book newBook = new Book().setTitle("Thomas H. Cormen");
+//        newBook = bookDao.create(newBook);
 
         books.forEach(book -> {
             System.out.println("id = " + book.getId() + " title = " + book.getTitle());
