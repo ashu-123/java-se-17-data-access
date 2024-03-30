@@ -1,13 +1,16 @@
 package com.learning;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import com.learning.model.Book;
+import com.learning.repository.BookDao;
+import com.learning.repository.Dao;
+
+public class App {
+    public static void main(String[] args) {
+        Dao<Book> bookDao = new BookDao();
+        var books = bookDao.findAll();
+
+        books.forEach(book -> {
+            System.out.println("id = " + book.getId() + " title = " + book.getTitle());
+        });
     }
 }
