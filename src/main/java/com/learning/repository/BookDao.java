@@ -63,19 +63,17 @@ public class BookDao extends AbstractDao implements Dao<Book> {
                 Connection connection = getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
 
-        ){
+        ) {
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.executeUpdate();
 
             try (ResultSet genKeys = preparedStatement.getGeneratedKeys()) {
-                if(genKeys.next()) {
+                if (genKeys.next()) {
                     book.setId(genKeys.getLong(1));
                 }
             }
 
-        }
-
-        catch (SQLException sqlException) {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return book;
@@ -84,16 +82,36 @@ public class BookDao extends AbstractDao implements Dao<Book> {
     @Override
     public Book update(Book book) {
         String sqlQuery = "UPDATE BOOK SET TITLE = ? WHERE ID = ?";
-        try(Connection connection = getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
 
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setLong(2, book.getId());
             preparedStatement.executeUpdate();
-        }
-        catch(SQLException sqlException) {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return book;
+    }
+
+    public int[] update(List<Book> books) {
+        int[] records = {};
+        String sqlQuery = "UPDATE BOOK SET TITLE = ?, RATING = ? WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            for(Book book : books) {
+                preparedStatement.setString(1, book.getTitle());
+                preparedStatement.setInt(2, book.getRating());
+                preparedStatement.setLong(3, book.getId());
+
+                preparedStatement.addBatch();
+            }
+
+            records = preparedStatement.executeBatch();
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return records;
     }
 }

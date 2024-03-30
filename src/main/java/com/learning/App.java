@@ -27,9 +27,10 @@ public class App {
 //        Book newBook = new Book().setTitle("Thomas H. Cormen");
 //        newBook = bookDao.create(newBook);
 
-        books.forEach(book -> {
-            System.out.println("id = " + book.getId() + " title = " + book.getTitle());
-        });
+        books.forEach(book -> book.setRating(5));
 
+        var records = bookDao.update(books);
+
+        System.out.println(records.length);
     }
 }
