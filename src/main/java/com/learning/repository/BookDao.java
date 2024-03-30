@@ -54,4 +54,30 @@ public class BookDao extends AbstractDao implements Dao<Book> {
 
         return books;
     }
+
+    @Override
+    public Book create(Book book) {
+
+        String sqlQuery = "INSERT INTO BOOK (TITLE) VALUES (?)";
+        try (
+                Connection connection = getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+
+        ){
+            preparedStatement.setString(1, book.getTitle());
+            preparedStatement.executeUpdate();
+
+            try (ResultSet genKeys = preparedStatement.getGeneratedKeys()) {
+                if(genKeys.next()) {
+                    book.setId(genKeys.getLong(1));
+                }
+            }
+
+        }
+
+        catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return book;
+    }
 }
